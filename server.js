@@ -6,6 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3030;
 const KIT_API_KEY = process.env.KIT_API_KEY;
 const TAG_ID = 19096324; // 3k-field-guide
+const SEQUENCE_ID = 2731684; // 3K Field Guide Welcome
 
 function kitRequest(method, endpoint, body) {
   return new Promise((resolve, reject) => {
@@ -59,6 +60,15 @@ app.post('/subscribe', async (req, res) => {
 
     if (tagRes.status !== 200 && tagRes.status !== 201) {
       console.error('Kit tag error:', tagRes.status, tagRes.body);
+    }
+
+    // Step 3: Add to welcome sequence
+    const seqRes = await kitRequest('POST', `/sequences/${SEQUENCE_ID}/subscribers`, {
+      email_address: email
+    });
+
+    if (seqRes.status !== 200 && seqRes.status !== 201) {
+      console.error('Kit sequence error:', seqRes.status, seqRes.body);
     }
 
     res.json({ success: true, downloadUrl: '/guide.pdf' });
