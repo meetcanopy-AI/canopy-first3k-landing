@@ -299,6 +299,12 @@
     }
     .btn-download:hover { opacity: 0.88; }
 
+    .upsell-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-align: left;
+    }
     .upsell-box {
       background: rgba(168,85,247,0.08);
       border: 1px solid rgba(168,85,247,0.25);
@@ -324,6 +330,12 @@
       color: var(--ink-dim);
       margin-bottom: 14px;
     }
+    .upsell-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
     .upsell-price {
       font-size: 1.3rem;
       font-weight: 700;
@@ -331,7 +343,24 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      white-space: nowrap;
     }
+    .btn-upsell {
+      display: inline-block;
+      padding: 10px 20px;
+      border-radius: 10px;
+      background: var(--gradient);
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+    .btn-upsell:hover { opacity: 0.85; }
 
     /* ── ERROR ── */
     .error-msg {
@@ -433,11 +462,25 @@
         Download the Guide Now →
       </a>
 
-      <div class="upsell-box">
-        <div class="upsell-label">Ready for the next level?</div>
-        <h4>How I Closed a $4K Deal Through the DMs</h4>
-        <p>10 prompts. The exact playbook. How to open cold, follow up without chasing, and close without a sales call.</p>
-        <span class="upsell-price">$47</span>
+      <div class="upsell-grid">
+        <div class="upsell-box">
+          <div class="upsell-label">Start using AI today</div>
+          <h4>The Prompt Starter Kit</h4>
+          <p>30 copy-paste AI prompts for emails, content, client replies, pitching, and planning. Instant download.</p>
+          <div class="upsell-row">
+            <span class="upsell-price">$27</span>
+            <button class="btn-upsell" onclick="buyKit()">Get the Kit →</button>
+          </div>
+        </div>
+        <div class="upsell-box">
+          <div class="upsell-label">Ready to close deals?</div>
+          <h4>How I Closed a $4K Deal Through the DMs</h4>
+          <p>10 prompts. The exact playbook. How to open cold, follow up without chasing, and close without a sales call.</p>
+          <div class="upsell-row">
+            <span class="upsell-price">$47</span>
+            <button class="btn-upsell" onclick="buyPlaybook()">Get the Playbook →</button>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -496,6 +539,24 @@
         errorMsg.classList.add('visible');
       }
     });
+
+    const DM_PLAYBOOK_URL = 'https://canopy-dm-playbook-production.up.railway.app';
+
+    async function buyKit() {
+      try {
+        const res = await fetch(`${DM_PLAYBOOK_URL}/create-checkout-kit`, { method: 'POST' });
+        const data = await res.json();
+        if (data.url) window.location.href = data.url;
+      } catch { alert('Something went wrong. Please try again.'); }
+    }
+
+    async function buyPlaybook() {
+      try {
+        const res = await fetch(`${DM_PLAYBOOK_URL}/create-checkout`, { method: 'POST' });
+        const data = await res.json();
+        if (data.url) window.location.href = data.url;
+      } catch { alert('Something went wrong. Please try again.'); }
+    }
   </script>
 </body>
 </html>
